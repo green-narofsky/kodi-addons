@@ -1,0 +1,28 @@
+[package]
+name = "kodi-addons"
+version = "0.1.0"
+authors = ["John Matthew Narofsky <7ytd765789@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+# We use Warp (which uses Tokio) for serving HTTPS.
+tokio = { version = "1", features = ["full"], optional = true }
+warp = { version = "0.3.0", features = ["compression"], optional = true }
+# Kodi uses XML for manifests
+# We use quick-xml to generate addon listings.
+# In addition, since we're using XML anyway,
+# server configuration is written in XML.
+quick-xml = { version = "0.20.0", features = ["serialize"] }
+# We use XPath to grab stuff from the XML more easily.
+sxd-xpath = "0.4.2"
+sxd-document = "0.3.2"
+# We use BLAKE3 for addon manifest checksums
+blake3 = "0.3.7"
+
+[features]
+default = ["server"]
+# Allow building without server,
+# in case someone just wants to generate the listings.
+server = ["tokio", "warp"]
